@@ -1,30 +1,19 @@
 // require("dotenv").config({ path: "./env" });
+import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 dotenv.config({
   path: "./env",
 });
 
-connectDB();
+const app = express();
 
-// import mongoose from "mongoose";
-// import { DB_NAME } from "./constants";
-// import express from "express";
-// const app = express();
-
-// (async () => {
-//   try {
-//     await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`);
-//     app.on("error", (error) => {
-//       console.log("NOT ABLE TO TALK TO DATABASE");
-
-//       app.listen(process.env.PORT, () => {
-//         console.log(`App is listening on port ${process.env.PORT}`);
-//         throw error;
-//       });
-//     });
-//   } catch (error) {
-//     console.log("ERROR: ", error);
-//     throw error;
-//   }
-// })();
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`SERVER IS RUNNING AT PORT: ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log("MONGODB CONNECTION FAILED !!! ", err);
+  });
